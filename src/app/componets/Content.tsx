@@ -1,10 +1,13 @@
 import { use, useState } from "react"
 import { MyContext } from "../page";
 import { Recordings } from "./Recordings";
+import { Search } from "./Search";
 
 export const Content = () => {
     const userName = use(MyContext)?.userEmail.split('@')[0];
     const [showRecordings, setShowRecordings] = useState(true);
+
+    const [filter, setFilter] = useState('');
 
     return (
         <main className="
@@ -17,7 +20,10 @@ export const Content = () => {
                 Welcome {userName?.toUpperCase()} to the Frontend Community!
             </h1>
             {showRecordings && (
-                <Recordings />
+                <>
+                    <Search onChange={(value) => setFilter(value)} />
+                    <Recordings filter={filter} />
+                </>
             )}
             <button
                 type="button"

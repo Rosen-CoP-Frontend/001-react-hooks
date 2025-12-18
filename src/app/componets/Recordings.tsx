@@ -1,12 +1,25 @@
 'use client';
 
-export const Recordings = () => {
-    const loading = false;
-    const data = [
-        { id: 1, title: "Recording 1", url: "https://example.com/recording1" },
-        { id: 2, title: "Recording 2", url: "https://example.com/recording2" },
-        { id: 3, title: "Recording 3", url: "https://example.com/recording3" },
-    ];
+import { useEffect, useState } from "react";
+import { getRecordings } from "../services/recordings";
+
+export const Recordings = ({ filter }: { filter: string }) => {
+    const [data, setData] = useState<{
+        id: string;
+        title: string;
+        url: string;
+    }[] | null>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const response = await getRecordings(filter);
+            setData(response);
+            setLoading(false);
+        }
+        fetchData();
+    }, [filter]);
 
     if (loading) {
         return <div>Loading recordings...</div>;
